@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
+import { useAuthStore } from '../store/authStore';
+import { useThemeStore } from '../store/themeStore';
+import { loginSchema } from '../utils/schemas';
 import { Shield, Mail, Lock, LogIn, Info, Sun, Moon } from 'lucide-react';
 import Toast from '../components/Toast';
 import type { ToastType } from '../components/Toast';
@@ -12,8 +13,13 @@ const Login: React.FC = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
 
-  const { login, user, loading } = useAuth();
-  const { theme, toggleTheme } = useTheme();
+  const login = useAuthStore((state) => state.login);
+  const user = useAuthStore((state) => state.user);
+  const loading = useAuthStore((state) => state.loading);
+
+  const theme = useThemeStore((state) => state.theme);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -28,8 +34,11 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
-      setToast({ message: 'Por favor complete todos los campos', type: 'error' });
+
+    const result = loginSchema.safeParse({ email, password });
+    if (!result.success) {
+      const errMsg = result.error.issues[0].message;
+      setToast({ message: errMsg, type: 'error' });
       return;
     }
 

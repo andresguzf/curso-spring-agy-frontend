@@ -1,44 +1,42 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
-import { Shield, Mail, Lock, UserPlus, ShieldAlert, Sun, Moon } from 'lucide-react';
+import { useAuthStore } from '../store/authStore';
+import { useThemeStore } from '../store/themeStore';
+import { registerSchema } from '../utils/schemas';
+import { Shield, Mail, Lock, UserPlus, Sun, Moon } from 'lucide-react';
 import Toast from '../components/Toast';
 import type { ToastType } from '../components/Toast';
 
 const Register: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [roles, setRoles] = useState('ROLE_USER');
   const [formLoading, setFormLoading] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: ToastType } | null>(null);
 
-  const { register } = useAuth();
-  const { theme, toggleTheme } = useTheme();
+  const registerUser = useAuthStore((state) => state.register);
+  const theme = useThemeStore((state) => state.theme);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      setToast({ message: 'Por favor complete todos los campos', type: 'error' });
-      return;
-    }
-
-    if (password.length < 6) {
-      setToast({ message: 'La contraseña debe tener al menos 6 caracteres', type: 'error' });
+    const result = registerSchema.safeParse({ email, password, roles: 'ROLE_USER' });
+    if (!result.success) {
+      const errMsg = result.error.issues[0].message;
+      setToast({ message: errMsg, type: 'error' });
       return;
     }
 
     setFormLoading(true);
     try {
-      await register({ email, password, roles });
+      await registerUser({ email, password, roles: 'ROLE_USER' });
       setToast({ message: '¡Usuario registrado correctamente! Redirigiendo...', type: 'success' });
       
       // Delay navigation slightly so they can read the success toast
       setTimeout(() => {
         navigate('/login');
-      }, 1500);
+      }, 1550);
     } catch (error: any) {
       console.error(error);
       const errMsg = error.response?.data?.message || 
@@ -54,7 +52,7 @@ const Register: React.FC = () => {
       {/* Floating Theme Toggle Switcher */}
       <button
         onClick={toggleTheme}
-        className="fixed top-5 right-5 z-20 flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 active:scale-95 shadow-sm transition-all duration-300 cursor-pointer"
+        className="fixed top-5 right-5 z-20 flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200 dark:border-white/5 bg-white dark:bg-white/5 text-slate-650 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 active:scale-95 shadow-sm transition-all duration-300 cursor-pointer"
         title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
       >
         {theme === 'dark' ? (
@@ -96,7 +94,7 @@ const Register: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="ejemplo@correo.com"
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-white dark:bg-slate-950/50 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm"
+                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-white dark:bg-slate-950/50 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-655 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm"
                   required
                 />
               </div>
@@ -113,34 +111,18 @@ const Register: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-white dark:bg-slate-950/50 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm"
+                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-white dark:bg-slate-950/50 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-655 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm"
                   required
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
-                Rol del Usuario
-              </label>
-              <div className="relative">
-                <ShieldAlert className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 dark:text-slate-500" />
-                <select
-                  value={roles}
-                  onChange={(e) => setRoles(e.target.value)}
-                  className="w-full pl-11 pr-4 py-3 rounded-xl bg-white dark:bg-slate-950/50 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm appearance-none cursor-pointer"
-                >
-                  <option value="ROLE_USER" className="bg-slate-900 text-slate-200">Usuario (ROLE_USER - Solo Lectura)</option>
-                  <option value="ROLE_USER,ROLE_ADMIN" className="bg-slate-900 text-slate-200">Administrador (ROLE_ADMIN - CRUD Completo)</option>
-                </select>
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-500 w-0 h-0"></div>
-              </div>
-            </div>
+
 
             <button
               type="submit"
               disabled={formLoading}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold shadow-lg shadow-purple-600/20 hover:shadow-purple-600/30 active:scale-98 transition-all disabled:opacity-50 disabled:scale-100 disabled:pointer-events-none mt-2 cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-purple-650 hover:bg-purple-600 text-white font-semibold shadow-lg shadow-purple-600/20 hover:shadow-purple-600/30 active:scale-98 transition-all disabled:opacity-50 disabled:scale-100 disabled:pointer-events-none mt-2 cursor-pointer"
             >
               {formLoading ? (
                 <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin"></div>

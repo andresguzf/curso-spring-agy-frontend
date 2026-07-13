@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import type { CustomerDto } from '../types';
+import type { CustomerDto } from '../../types';
+import { customerSchema } from '../../utils/schemas';
 import { X, Save, User, Mail, Phone, MapPin } from 'lucide-react';
 
 interface CustomerModalProps {
@@ -39,21 +40,26 @@ const CustomerModal: React.FC<CustomerModalProps> = ({ isOpen, onClose, onSave, 
   if (!isOpen) return null;
 
   const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-    if (!firstName.trim()) newErrors.firstName = 'El nombre es obligatorio';
-    else if (firstName.length < 2 || firstName.length > 50) newErrors.firstName = 'El nombre debe tener entre 2 y 50 caracteres';
-    
-    if (!lastName.trim()) newErrors.lastName = 'El apellido es obligatorio';
-    else if (lastName.length < 2 || lastName.length > 50) newErrors.lastName = 'El apellido debe tener entre 2 y 50 caracteres';
-    
-    if (!email.trim()) {
-      newErrors.email = 'El correo electrónico es obligatorio';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = 'El formato del correo es inválido';
+    const result = customerSchema.safeParse({
+      firstName,
+      lastName,
+      email,
+      phone: phone || undefined,
+      address: address || undefined,
+    });
+
+    if (!result.success) {
+      const newErrors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        const path = issue.path[0] as string;
+        newErrors[path] = issue.message;
+      });
+      setErrors(newErrors);
+      return false;
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setErrors({});
+    return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -109,7 +115,7 @@ const CustomerModal: React.FC<CustomerModalProps> = ({ isOpen, onClose, onSave, 
           </h3>
           <button 
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer"
+            className="text-slate-400 hover:text-slate-650 dark:hover:text-slate-200 transition-colors p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>

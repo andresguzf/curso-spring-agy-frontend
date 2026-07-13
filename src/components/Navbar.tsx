@@ -1,12 +1,17 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
+import { useAuthStore } from '../store/authStore';
+import { useThemeStore } from '../store/themeStore';
 import { LogOut, Users, User, LayoutDashboard, Shield, Sun, Moon } from 'lucide-react';
 
 const Navbar: React.FC = () => {
-  const { user, logout, hasRole } = useAuth();
-  const { theme, toggleTheme } = useTheme();
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
+  const hasRole = useAuthStore((state) => state.hasRole);
+  
+  const theme = useThemeStore((state) => state.theme);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
+  
   const location = useLocation();
   const navigate = useNavigate();
 

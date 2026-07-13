@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import type { UserDto, UserCreateDto } from '../types';
+import type { UserDto, UserCreateDto } from '../../types';
+import { userCreateSchema, userUpdateSchema } from '../../utils/schemas';
 import { X, Save, Mail, Lock, ShieldAlert } from 'lucide-react';
 
 interface UserModalProps {
@@ -33,27 +34,27 @@ const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, onSave, user }) 
   if (!isOpen) return null;
 
   const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-    
-    if (!email.trim()) {
-      newErrors.email = 'El correo electrónico es obligatorio';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = 'El formato del correo es inválido';
+    const data = {
+      email,
+      roles,
+      password: password || undefined,
+    };
+
+    const schema = user ? userUpdateSchema : userCreateSchema;
+    const result = schema.safeParse(data);
+
+    if (!result.success) {
+      const newErrors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        const path = issue.path[0] as string;
+        newErrors[path] = issue.message;
+      });
+      setErrors(newErrors);
+      return false;
     }
 
-    // Password is only mandatory on creation
-    if (!user) {
-      if (!password) {
-        newErrors.password = 'La contraseña es obligatoria';
-      } else if (password.length < 6) {
-        newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
-      }
-    } else if (password && password.length < 6) {
-      newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setErrors({});
+    return true;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -112,7 +113,7 @@ const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, onSave, user }) 
           </h3>
           <button 
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer"
+            className="text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 transition-colors p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -173,8 +174,8 @@ const UserModal: React.FC<UserModalProps> = ({ isOpen, onClose, onSave, user }) 
                 onChange={(e) => setRoles(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-950/40 border border-slate-300 dark:border-white/10 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm appearance-none cursor-pointer"
               >
-                <option value="ROLE_USER" className="bg-slate-900 text-slate-200">Usuario (ROLE_USER)</option>
-                <option value="ROLE_USER,ROLE_ADMIN" className="bg-slate-900 text-slate-200">Administrador (ROLE_USER, ROLE_ADMIN)</option>
+                <option value="ROLE_USER" className="bg-slate-905 text-slate-200">Usuario (ROLE_USER)</option>
+                <option value="ROLE_USER,ROLE_ADMIN" className="bg-slate-905 text-slate-200">Administrador (ROLE_USER, ROLE_ADMIN)</option>
               </select>
               <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-500 w-0 h-0"></div>
             </div>

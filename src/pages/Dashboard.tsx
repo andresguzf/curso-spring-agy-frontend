@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuthStore } from '../store/authStore';
 import { customerService, userService } from '../services/api';
 import { Users, ShieldAlert, Award, Key, UserCheck, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Dashboard: React.FC = () => {
-  const { user, hasRole } = useAuth();
+  const user = useAuthStore((state) => state.user);
+  const hasRole = useAuthStore((state) => state.hasRole);
   const [customerCount, setCustomerCount] = useState<number | null>(null);
   const [userCount, setUserCount] = useState<number | null>(null);
   const [loadingStats, setLoadingStats] = useState(true);
