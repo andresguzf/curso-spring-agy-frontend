@@ -49,9 +49,13 @@ const Customers: React.FC = () => {
     fetchCustomers();
   }, []);
 
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1);
+  };
+
   // Filter items based on search query
   const filteredCustomers = useMemo(() => {
-    setCurrentPage(1); // Reset to page 1 on search
     return customers.filter((customer) => {
       const query = searchQuery.toLowerCase();
       return (
@@ -153,7 +157,7 @@ const Customers: React.FC = () => {
       {/* Search Bar Component */}
       <SearchBar
         value={searchQuery}
-        onChange={setSearchQuery}
+        onChange={handleSearchChange}
         placeholder="Buscar por nombre, correo, teléfono o dirección..."
       />
 
@@ -162,7 +166,7 @@ const Customers: React.FC = () => {
         {loading ? (
           <div className="p-12 flex flex-col items-center justify-center space-y-4">
             <div className="w-10 h-10 rounded-full border-4 border-slate-200 dark:border-slate-800 border-t-indigo-500 dark:border-t-indigo-400 animate-spin"></div>
-            <p className="text-slate-500 dark:text-slate-400 text-sm font-medium animate-pulse">Cargando base de datos...</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm font-medium animate-pulse">Cargando base de datos…</p>
           </div>
         ) : (
           <>

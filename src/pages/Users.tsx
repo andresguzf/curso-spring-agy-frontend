@@ -48,9 +48,13 @@ const UsersList: React.FC = () => {
     fetchUsers();
   }, []);
 
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    setCurrentPage(1);
+  };
+
   // Filter users based on search query
   const filteredUsers = useMemo(() => {
-    setCurrentPage(1); // Reset to page 1 on search
     return users.filter((u) =>
       u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
       u.roles.toLowerCase().includes(searchQuery.toLowerCase())
@@ -144,7 +148,7 @@ const UsersList: React.FC = () => {
       {/* Search Bar Component */}
       <SearchBar
         value={searchQuery}
-        onChange={setSearchQuery}
+        onChange={handleSearchChange}
         placeholder="Buscar usuario por correo o rol..."
       />
 
@@ -153,7 +157,7 @@ const UsersList: React.FC = () => {
         {loading ? (
           <div className="p-12 flex flex-col items-center justify-center space-y-4">
             <div className="w-10 h-10 rounded-full border-4 border-slate-200 dark:border-slate-800 border-t-purple-500 dark:border-t-purple-400 animate-spin"></div>
-            <p className="text-slate-500 dark:text-slate-400 text-sm font-medium animate-pulse">Cargando base de datos...</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm font-medium animate-pulse">Cargando base de datos…</p>
           </div>
         ) : (
           <>

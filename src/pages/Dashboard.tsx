@@ -17,12 +17,16 @@ const Dashboard: React.FC = () => {
     const fetchStats = async () => {
       try {
         setLoadingStats(true);
-        const customers = await customerService.getAll();
-        setCustomerCount(customers.length);
-
         if (isAdmin) {
-          const users = await userService.getAll();
+          const [customers, users] = await Promise.all([
+            customerService.getAll(),
+            userService.getAll()
+          ]);
+          setCustomerCount(customers.length);
           setUserCount(users.length);
+        } else {
+          const customers = await customerService.getAll();
+          setCustomerCount(customers.length);
         }
       } catch (err) {
         console.error('Error fetching dashboard stats', err);

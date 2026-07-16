@@ -74,8 +74,9 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
             onClick={() => onEdit(userItem)}
             className="p-2 rounded-lg border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/2 hover:bg-indigo-500/10 dark:hover:bg-indigo-500/10 hover:text-indigo-650 dark:hover:text-indigo-400 text-slate-400 transition-all cursor-pointer"
             title="Editar usuario"
+            aria-label={`Editar usuario ${userItem.email}`}
           >
-            <Edit2 className="w-4 h-4" />
+            <Edit2 className="w-4 h-4" aria-hidden="true" />
           </button>
 
           {!isSelf ? (
@@ -83,15 +84,17 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
               onClick={() => onDelete(userItem.id)}
               className="p-2 rounded-lg border border-slate-200 dark:border-white/5 bg-slate-50 dark:bg-white/2 hover:bg-rose-500/10 dark:hover:bg-rose-500/10 hover:text-rose-650 dark:hover:text-rose-400 text-slate-400 transition-all cursor-pointer"
               title="Eliminar usuario"
+              aria-label={`Eliminar usuario ${userItem.email}`}
             >
-              <Trash2 className="w-4 h-4" />
+              <Trash2 className="w-4 h-4" aria-hidden="true" />
             </button>
           ) : (
             <div
               className="p-2 rounded-lg border border-transparent text-slate-350 dark:text-slate-700 cursor-not-allowed"
               title="No puedes eliminar tu propio usuario activo"
+              aria-label="No puedes eliminar tu propio usuario"
             >
-              <Trash2 className="w-4 h-4 opacity-30" />
+              <Trash2 className="w-4 h-4 opacity-30" aria-hidden="true" />
             </div>
           )}
         </div>
@@ -100,4 +103,4 @@ const UserTableRow: React.FC<UserTableRowProps> = ({
   );
 };
 
-export default UserTableRow;
+export default React.memo(UserTableRow);

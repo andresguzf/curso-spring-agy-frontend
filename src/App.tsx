@@ -32,7 +32,7 @@ const App: React.FC = () => {
     return (
       <div className="min-h-screen bg-[#070a13] flex flex-col items-center justify-center space-y-4">
         <div className="w-10 h-10 rounded-full border-4 border-slate-700 border-t-indigo-500 animate-spin"></div>
-        <p className="text-slate-400 text-sm font-medium animate-pulse">Iniciando aplicación...</p>
+        <p className="text-slate-400 text-sm font-medium animate-pulse">Iniciando aplicación…</p>
       </div>
     );
   }

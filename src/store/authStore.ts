@@ -20,7 +20,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const userData = await authService.getMe();
       set({ user: userData });
-    } catch (error) {
+    } catch {
       set({ user: null });
     } finally {
       set({ loading: false });
@@ -42,12 +42,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   register: async (userData: UserCreateDto): Promise<UserDto> => {
-    try {
-      const newUser = await userService.register(userData);
-      return newUser;
-    } catch (error) {
-      throw error;
-    }
+    return userService.register(userData);
   },
 
   logout: async (): Promise<void> => {

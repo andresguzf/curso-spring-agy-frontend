@@ -116,8 +116,9 @@ const CustomerModal: React.FC<CustomerModalProps> = ({ isOpen, onClose, onSave, 
           <button 
             onClick={onClose}
             className="text-slate-400 hover:text-slate-650 dark:hover:text-slate-200 transition-colors p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-white/5 cursor-pointer"
+            aria-label="Cerrar modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
 
@@ -132,30 +133,38 @@ const CustomerModal: React.FC<CustomerModalProps> = ({ isOpen, onClose, onSave, 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Nombre</label>
+              <label htmlFor="cust-firstname" className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Nombre</label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" aria-hidden="true" />
                 <input
+                  id="cust-firstname"
+                  name="firstName"
                   type="text"
+                  autoComplete="given-name"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   placeholder="Juan"
                   className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-950/40 border ${errors.firstName ? 'border-rose-500/50' : 'border-slate-300 dark:border-white/10'} text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm`}
+                  required
                 />
               </div>
               {errors.firstName && <p className="text-rose-500 dark:text-rose-400 text-xs mt-1 font-medium">{errors.firstName}</p>}
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Apellido</label>
+              <label htmlFor="cust-lastname" className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Apellido</label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" aria-hidden="true" />
                 <input
+                  id="cust-lastname"
+                  name="lastName"
                   type="text"
+                  autoComplete="family-name"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   placeholder="Pérez"
                   className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-950/40 border ${errors.lastName ? 'border-rose-500/50' : 'border-slate-300 dark:border-white/10'} text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm`}
+                  required
                 />
               </div>
               {errors.lastName && <p className="text-rose-500 dark:text-rose-400 text-xs mt-1 font-medium">{errors.lastName}</p>}
@@ -163,26 +172,34 @@ const CustomerModal: React.FC<CustomerModalProps> = ({ isOpen, onClose, onSave, 
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Correo Electrónico</label>
+            <label htmlFor="cust-email" className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Correo Electrónico</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" aria-hidden="true" />
               <input
+                id="cust-email"
+                name="email"
                 type="email"
+                autoComplete="email"
+                spellCheck={false}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="juan.perez@correo.com"
                 className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-950/40 border ${errors.email ? 'border-rose-500/50' : 'border-slate-300 dark:border-white/10'} text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm`}
+                required
               />
             </div>
             {errors.email && <p className="text-rose-500 dark:text-rose-400 text-xs mt-1 font-medium">{errors.email}</p>}
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Teléfono (Opcional)</label>
+            <label htmlFor="cust-phone" className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Teléfono (Opcional)</label>
             <div className="relative">
-              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" aria-hidden="true" />
               <input
+                id="cust-phone"
+                name="phone"
                 type="text"
+                autoComplete="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+56 9 1234 5678"
@@ -192,11 +209,14 @@ const CustomerModal: React.FC<CustomerModalProps> = ({ isOpen, onClose, onSave, 
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Dirección (Opcional)</label>
+            <label htmlFor="cust-address" className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Dirección (Opcional)</label>
             <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" aria-hidden="true" />
               <input
+                id="cust-address"
+                name="address"
                 type="text"
+                autoComplete="street-address"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Av. Providencia 1234, Santiago"

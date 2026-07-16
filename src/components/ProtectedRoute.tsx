@@ -21,7 +21,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole 
           <div className="absolute inset-0 rounded-full border-4 border-slate-800"></div>
           <div className="absolute inset-0 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin"></div>
         </div>
-        <p className="mt-4 text-slate-400 font-medium animate-pulse text-sm">Cargando sesión segura...</p>
+        <p className="mt-4 text-slate-400 font-medium animate-pulse text-sm">Cargando sesión segura…</p>
       </div>
     );
   }

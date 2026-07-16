@@ -12,12 +12,12 @@ const Layout: React.FC = () => {
       <Navbar />
 
       {/* Main Content Area */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 md:pb-8 relative z-10">
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-white/5 py-6 text-center text-xs text-slate-500 relative z-10 bg-slate-100/50 dark:bg-slate-950/20 backdrop-blur-sm transition-colors duration-300">
+      <footer className="border-t border-slate-200 dark:border-white/5 pt-6 pb-24 md:pb-6 text-center text-xs text-slate-500 relative z-10 bg-slate-100/50 dark:bg-slate-950/20 backdrop-blur-sm transition-colors duration-300">
         <p>© 2026 AGY Fullstack Core. Todos los derechos reservados. Desarrollado con React 19 y Tailwind CSS v4.</p>
       </footer>
     </div>
