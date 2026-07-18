@@ -23,3 +23,20 @@ export interface LoginRequest {
   email: string;
   password?: string;
 }
+
+export interface InvoiceItemDto {
+  id?: number;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
+}
+
+export interface InvoiceDto {
+  id?: number;
+  customerId: number;
+  amount: number;
+  description?: string;
+  status: string;
+  items?: InvoiceItemDto[];
+}

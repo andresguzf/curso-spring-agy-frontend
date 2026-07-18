@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState, useMemo } from 'react';
 import type { CustomerDto } from '../types';
 import { customerService } from '../services/api';
@@ -10,6 +12,7 @@ import CustomerModal from '../components/customers/CustomerModal';
 import ConfirmModal from '../components/ConfirmModal';
 import Toast from '../components/Toast';
 import type { ToastType } from '../components/Toast';
+import InvoiceListModal from '../components/customers/InvoiceListModal';
 
 const Customers: React.FC = () => {
   const [customers, setCustomers] = useState<CustomerDto[]>([]);
@@ -28,6 +31,15 @@ const Customers: React.FC = () => {
   // Confirm delete states
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [customerToDeleteId, setCustomerToDeleteId] = useState<number | null>(null);
+
+  // Invoices modal states
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  const [invoiceCustomer, setInvoiceCustomer] = useState<CustomerDto | null>(null);
+
+  const handleOpenInvoiceModal = (customer: CustomerDto) => {
+    setInvoiceCustomer(customer);
+    setIsInvoiceModalOpen(true);
+  };
 
   const hasRole = useAuthStore((state) => state.hasRole);
   const isAdmin = hasRole('ROLE_ADMIN');
@@ -175,6 +187,7 @@ const Customers: React.FC = () => {
               isAdmin={isAdmin}
               onEdit={handleOpenEditModal}
               onDelete={handleDeleteClick}
+              onOpenInvoices={handleOpenInvoiceModal}
             />
 
             {/* Pagination Component */}
@@ -197,6 +210,14 @@ const Customers: React.FC = () => {
         onClose={() => setIsModalOpen(false)}
         onSave={handleSaveCustomer}
         customer={selectedCustomer}
+      />
+
+      {/* Invoices List and Detail Modal */}
+      <InvoiceListModal
+        isOpen={isInvoiceModalOpen}
+        onClose={() => setIsInvoiceModalOpen(false)}
+        customer={invoiceCustomer}
+        isAdmin={isAdmin}
       />
 
       {/* Confirm Delete Dialog */}

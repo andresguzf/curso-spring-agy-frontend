@@ -8,6 +8,7 @@ interface CustomerTableProps {
   isAdmin: boolean;
   onEdit: (customer: CustomerDto) => void;
   onDelete: (id: number) => void;
+  onOpenInvoices: (customer: CustomerDto) => void;
 }
 
 const CustomerTable: React.FC<CustomerTableProps> = ({
@@ -15,6 +16,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
   isAdmin,
   onEdit,
   onDelete,
+  onOpenInvoices,
 }) => {
   if (customers.length === 0) {
     return (
@@ -36,7 +38,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
             <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Cliente</th>
             <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Contacto</th>
             <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Dirección</th>
-            {isAdmin && <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-right">Acciones</th>}
+            <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-right">Acciones</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-200 dark:divide-white/5">
@@ -47,6 +49,7 @@ const CustomerTable: React.FC<CustomerTableProps> = ({
               isAdmin={isAdmin}
               onEdit={onEdit}
               onDelete={onDelete}
+              onOpenInvoices={onOpenInvoices}
             />
           ))}
         </tbody>

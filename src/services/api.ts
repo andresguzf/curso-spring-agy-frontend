@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { LoginRequest, UserCreateDto, UserDto, CustomerDto } from '../types';
+import type { LoginRequest, UserCreateDto, UserDto, CustomerDto, InvoiceDto } from '../types';
 
 const api = axios.create({
   baseURL: '', // Uses the dev proxy in vite.config.ts
@@ -59,6 +59,33 @@ export const customerService = {
   },
   delete: async (id: number): Promise<void> => {
     await api.delete(`/api/customers/${id}`);
+  },
+};
+
+// Invoice Services
+export const invoiceService = {
+  getAll: async (): Promise<InvoiceDto[]> => {
+    const response = await api.get<InvoiceDto[]>('/api/invoices');
+    return response.data;
+  },
+  getById: async (id: number): Promise<InvoiceDto> => {
+    const response = await api.get<InvoiceDto>(`/api/invoices/${id}`);
+    return response.data;
+  },
+  getByCustomerId: async (customerId: number): Promise<InvoiceDto[]> => {
+    const response = await api.get<InvoiceDto[]>(`/api/invoices/customer/${customerId}`);
+    return response.data;
+  },
+  create: async (invoice: InvoiceDto): Promise<InvoiceDto> => {
+    const response = await api.post<InvoiceDto>('/api/invoices', invoice);
+    return response.data;
+  },
+  update: async (id: number, invoice: InvoiceDto): Promise<InvoiceDto> => {
+    const response = await api.put<InvoiceDto>(`/api/invoices/${id}`, invoice);
+    return response.data;
+  },
+  delete: async (id: number): Promise<void> => {
+    await api.delete(`/api/invoices/${id}`);
   },
 };
 
