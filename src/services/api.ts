@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { LoginRequest, UserCreateDto, UserDto, CustomerDto, InvoiceDto } from '../types';
 
 const api = axios.create({
-  baseURL: '', // Uses the dev proxy in vite.config.ts
+  baseURL: import.meta.env.VITE_API_BASE_URL || '',
   headers: {
     'Content-Type': 'application/json',
   },
