@@ -10,7 +10,7 @@ Este proyecto es la aplicación frontend moderna para la **Gestión de Clientes 
 - **Estilos**: [Tailwind CSS v4](https://tailwindcss.com/) (integrado mediante `@tailwindcss/vite`)
 - **Estado Global**: [Zustand v5](https://github.com/pmndrs/zustand) (con persistencia en LocalStorage)
 - **Validaciones**: [Zod v4](https://zod.dev/) para esquemas y validación de tipos
-- **Cliente HTTP**: [Axios](https://axios-http.com/) configurado con `withCredentials: true` para el manejo automático de cookies JWT HttpOnly del backend.
+- **Cliente HTTP**: [Axios](https://axios-http.com/) configurado con `withCredentials: true` para el manejo automático de cookies JWT HttpOnly del backend (compatible con CORS SameSite=None y Secure).
 
 ## Características
 
