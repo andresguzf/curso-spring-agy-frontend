@@ -99,3 +99,9 @@ Al realizar tareas en este repositorio, adhiérete estrictamente a las siguiente
 3. **Manejo de API y Cookies:** No modifiques `withCredentials: true` en `src/services/api.ts`, ya que las sesiones dependen de cookies HttpOnly seguras configuradas por el backend.
 4. **Preservar Comentarios:** No elimines los comentarios explicativos existentes en los componentes o configuraciones.
 5. **No Crear Estilos Ad-Hoc:** Usa el sistema de diseño existente y las variables globales. Evita agregar colores directos o configuraciones personalizadas fuera de la paleta establecida en `index.css`.
+
+---
+
+## 7. Repositorio Remoto
+* **GitHub Repository**: [curso-spring-agy-frontend](https://github.com/andresguzf/curso-spring-agy-frontend)
+
